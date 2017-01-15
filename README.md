@@ -32,7 +32,7 @@ python main.py --input laska.png --output laska_save.png --layer_name pool5
 
 ## Acknowledgement
 
-Model weights (vgg16_weights.npz), TensorFlow model of vgg (vgg16.py), Class names (imagenet_classes.py) and example input (laska.png) were either copied or modified from this blog by Davi Frossard (https://www.cs.toronto.edu/~frossard/post/vgg16/)
+Model weights (vgg16_weights.npz),  Class names (imagenet_classes.py) and example input (laska.png) were copied from this blog by Davi Frossard (https://www.cs.toronto.edu/~frossard/post/vgg16/). TensorFlow model of vgg (vgg16.py) was taken from the same blog but was modified a little. https://github.com/jacobgil/keras-grad-cam also provided key insights into understanding the algorithm.
 
 
 
