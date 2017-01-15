@@ -18,7 +18,7 @@ Download the VGG16 weights from https://www.cs.toronto.edu/~frossard/vgg16/vgg16
 ## Usage
 
 ```sh
-python main.py --input laska.png --output laska_save.png
+python main.py --input laska.png --output laska_save.png --layer_name pool5
 ```
 
 ## Results
