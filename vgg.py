@@ -57,11 +57,11 @@ class vgg16:
             self.parameters += [kernel, biases]
 
         # pool1
-        self.pool1 = tf.nn.max_pool(self.conv1_2,
-                               ksize=[1, 2, 2, 1],
-                               strides=[1, 2, 2, 1],
-                               padding='SAME',
-                               name='pool1')
+        self.pool1 = tf.nn.max_pool2d(self.conv1_2,
+                                      ksize=[1, 2, 2, 1],
+                                      strides=[1, 2, 2, 1],
+                                      padding='SAME',
+                                      name='pool1')
         self.layers['pool1'] = self.pool1
 
         # conv2_1
@@ -89,11 +89,11 @@ class vgg16:
             self.parameters += [kernel, biases]
 
         # pool2
-        self.pool2 = tf.nn.max_pool(self.conv2_2,
-                               ksize=[1, 2, 2, 1],
-                               strides=[1, 2, 2, 1],
-                               padding='SAME',
-                               name='pool2')
+        self.pool2 = tf.nn.max_pool2d(self.conv2_2,
+                                      ksize=[1, 2, 2, 1],
+                                      strides=[1, 2, 2, 1],
+                                      padding='SAME',
+                                      name='pool2')
         self.layers['pool2'] = self.pool2
 
         # conv3_1
@@ -133,11 +133,11 @@ class vgg16:
             self.parameters += [kernel, biases]
 
         # pool3
-        self.pool3 = tf.nn.max_pool(self.conv3_3,
-                               ksize=[1, 2, 2, 1],
-                               strides=[1, 2, 2, 1],
-                               padding='SAME',
-                               name='pool3')
+        self.pool3 = tf.nn.max_pool2d(self.conv3_3,
+                                      ksize=[1, 2, 2, 1],
+                                      strides=[1, 2, 2, 1],
+                                      padding='SAME',
+                                      name='pool3')
         self.layers['pool3'] = self.pool3
 
         # conv4_1
@@ -177,11 +177,11 @@ class vgg16:
             self.parameters += [kernel, biases]
 
         # pool4
-        self.pool4 = tf.nn.max_pool(self.conv4_3,
-                               ksize=[1, 2, 2, 1],
-                               strides=[1, 2, 2, 1],
-                               padding='SAME',
-                               name='pool4')
+        self.pool4 = tf.nn.max_pool2d(self.conv4_3,
+                                      ksize=[1, 2, 2, 1],
+                                      strides=[1, 2, 2, 1],
+                                      padding='SAME',
+                                      name='pool4')
         self.layers['pool4'] = self.pool4
 
         # conv5_1
@@ -221,11 +221,11 @@ class vgg16:
             self.parameters += [kernel, biases]
 
         # pool5
-        self.pool5 = tf.nn.max_pool(self.conv5_3,
-                               ksize=[1, 2, 2, 1],
-                               strides=[1, 2, 2, 1],
-                               padding='SAME',
-                               name='pool4')
+        self.pool5 = tf.nn.max_pool2d(self.conv5_3,
+                                      ksize=[1, 2, 2, 1],
+                                      strides=[1, 2, 2, 1],
+                                      padding='SAME',
+                                      name='pool4')
         self.layers['pool5'] = self.pool5
 
     def fc_layers(self):
