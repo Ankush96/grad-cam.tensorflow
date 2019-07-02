@@ -32,12 +32,12 @@ def grad_cam(x, vgg, sess, predicted_class, layer_name, nb_classes):
 	conv_layer = vgg.layers[layer_name]
 	# [1000]-D tensor with target class index set to 1 and rest as 0
 	one_hot = tf.sparse_to_dense(predicted_class, [nb_classes], 1.0)
-	signal = tf.mul(vgg.layers['fc3'], one_hot)
+	signal = tf.multiply(vgg.layers['fc3'], one_hot)
 	loss = tf.reduce_mean(signal)
 
 	grads = tf.gradients(loss, conv_layer)[0]
 	# Normalizing the gradients
-	norm_grads = tf.div(grads, tf.sqrt(tf.reduce_mean(tf.square(grads))) + tf.constant(1e-5))
+	norm_grads = tf.math.divide(grads, tf.sqrt(tf.reduce_mean(tf.square(grads))) + tf.constant(1e-5))
 
 	output, grads_val = sess.run([conv_layer, norm_grads], feed_dict={vgg.imgs: x})
 	output = output[0]           # [7,7,512]
