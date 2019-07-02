@@ -65,10 +65,10 @@ def grad_cam(x, vgg, sess, predicted_class, layer_name, nb_classes):
 def main(_):
 	x, img = load_image(FLAGS.input)
 
-	sess = tf.Session()
+	sess = tf.compat.v1.Session()
 
 	print("\nLoading Vgg")
-	imgs = tf.placeholder(tf.float32, [None, 224, 224, 3])
+	imgs = tf.compat.v1.placeholder(tf.float32, [None, 224, 224, 3])
 	vgg = vgg16(imgs, 'vgg16_weights.npz', sess)
 
 	print("\nFeedforwarding")
@@ -100,5 +100,5 @@ def main(_):
 	io.imsave(FLAGS.output, new_img)
 
 if __name__ == '__main__':
-	tf.app.run()
+	tf.compat.v1.app.run()
 
