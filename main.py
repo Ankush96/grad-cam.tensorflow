@@ -31,7 +31,7 @@ def grad_cam(x, vgg, sess, predicted_class, layer_name, nb_classes):
 	# Conv layer tensor [?,7,7,512]
 	conv_layer = vgg.layers[layer_name]
 	# [1000]-D tensor with target class index set to 1 and rest as 0
-	one_hot = tf.sparse_to_dense(predicted_class, [nb_classes], 1.0)
+	one_hot = tf.sparse.to_dense(tf.sparse.SparseTensor(indices=[[predicted_class,]], values=[1.0], dense_shape=[1000]))
 	signal = tf.multiply(vgg.layers['fc3'], one_hot)
 	loss = tf.reduce_mean(signal)
 
