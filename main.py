@@ -5,20 +5,20 @@ from skimage import io
 from skimage.transform import resize
 from matplotlib import pyplot as plt
 from imagenet_classes import class_names
-from scipy.misc import imread, imresize
+import cv2 as cv
 
-flags = tf.app.flags
+flags = tf.compat.v1.app.flags
 flags.DEFINE_string("input", "laska.png", "Path to input image ['laska.png']")
 flags.DEFINE_string("output", "laska_save.png", "Path to input image ['laska_save.png']")
 flags.DEFINE_string("layer_name", "pool5", "Layer till which to backpropagate ['pool5']")
 
 FLAGS = flags.FLAGS
-
+tf.compat.v1.disable_eager_execution()
 
 def load_image(img_path):
 	print("Loading image")
-	img = imread(img_path, mode='RGB')
-	img = imresize(img, (224, 224))
+	img = cv.imread(img_path, cv.IMREAD_COLOR)
+	img = cv.resize(img, (224, 224))
 	# Converting shape from [224,224,3] tp [1,224,224,3]
 	x = np.expand_dims(img, axis=0)
 	# Converting RGB to BGR for VGG
@@ -31,13 +31,13 @@ def grad_cam(x, vgg, sess, predicted_class, layer_name, nb_classes):
 	# Conv layer tensor [?,7,7,512]
 	conv_layer = vgg.layers[layer_name]
 	# [1000]-D tensor with target class index set to 1 and rest as 0
-	one_hot = tf.sparse_to_dense(predicted_class, [nb_classes], 1.0)
-	signal = tf.mul(vgg.layers['fc3'], one_hot)
+	one_hot = tf.compat.v1.sparse_to_dense(predicted_class, [nb_classes], 1.0)
+	signal = tf.multiply(vgg.layers['fc3'], one_hot)
 	loss = tf.reduce_mean(signal)
 
 	grads = tf.gradients(loss, conv_layer)[0]
 	# Normalizing the gradients
-	norm_grads = tf.div(grads, tf.sqrt(tf.reduce_mean(tf.square(grads))) + tf.constant(1e-5))
+	norm_grads = tf.divide(grads, tf.sqrt(tf.reduce_mean(tf.square(grads))) + tf.constant(1e-5))
 
 	output, grads_val = sess.run([conv_layer, norm_grads], feed_dict={vgg.imgs: x})
 	output = output[0]           # [7,7,512]
@@ -48,7 +48,7 @@ def grad_cam(x, vgg, sess, predicted_class, layer_name, nb_classes):
 
 	# Taking a weighted average
 	for i, w in enumerate(weights):
-	    cam += w * output[:, :, i]
+		cam += w * output[:, :, i]
 
 	# Passing through ReLU
 	cam = np.maximum(cam, 0)
@@ -65,10 +65,10 @@ def grad_cam(x, vgg, sess, predicted_class, layer_name, nb_classes):
 def main(_):
 	x, img = load_image(FLAGS.input)
 
-	sess = tf.Session()
+	sess = tf.compat.v1.Session()
 
 	print("\nLoading Vgg")
-	imgs = tf.placeholder(tf.float32, [None, 224, 224, 3])
+	imgs = tf.compat.v1.placeholder(tf.float32, [None, 224, 224, 3])
 	vgg = vgg16(imgs, 'vgg16_weights.npz', sess)
 
 	print("\nFeedforwarding")
@@ -76,7 +76,7 @@ def main(_):
 	preds = (np.argsort(prob)[::-1])[0:5]
 	print('\nTop 5 classes are')
 	for p in preds:
-	    print(class_names[p], prob[p])
+		print(class_names[p], prob[p])
 
 	# Target class
 	predicted_class = preds[0]
@@ -100,5 +100,5 @@ def main(_):
 	io.imsave(FLAGS.output, new_img)
 
 if __name__ == '__main__':
-	tf.app.run()
+	tf.compat.v1.app.run()
 
